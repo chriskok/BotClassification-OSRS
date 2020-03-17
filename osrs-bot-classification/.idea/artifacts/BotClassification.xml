@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="BotClassification">
+    <output-path>$USER_HOME$/DreamBot/Scripts</output-path>
+    <root id="archive" name="BotClassification.jar">
+      <element id="module-output" name="osrs-bot-classification" />
+    </root>
+  </artifact>
+</component>
