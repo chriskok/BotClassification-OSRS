@@ -14,10 +14,14 @@ import java.net.URL;
 /**
  * Created by User on 03/16/2020.
  */
+
+
 @ScriptManifest(
         category = Category.UTILITY, name = "Bot Classification", author = "ChronicCoder", version = 0.1
 )
+
 public class Main extends AbstractScript {
+    String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
 
     public void onStart() {
         log("Welcome to Bot Detection Data Collection Script.");
@@ -32,7 +36,9 @@ public class Main extends AbstractScript {
         for (int i = 0; i < current_list.size(); i++) {
             log(current_list.get(i).getName());
         }
-        return 5000;
+
+        log(executePost(hiscores_url,"player=Hess"));
+        return 10000;
     }
 
     public static String executePost(String targetURL, String urlParameters) {
