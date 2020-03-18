@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by User on 03/16/2020.
@@ -22,6 +24,7 @@ import java.net.URL;
 
 public class Main extends AbstractScript {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
+    HashSet<String> checked_players = new HashSet<String>();
 
     public void onStart() {
         log("Welcome to Bot Detection Data Collection Script.");
@@ -34,10 +37,18 @@ public class Main extends AbstractScript {
         java.util.List<Player> current_list = current_players.all();
 
         for (int i = 0; i < current_list.size(); i++) {
-            log(current_list.get(i).getName());
+            String current_name = current_list.get(i).getName();
+            if(checked_players.contains(current_name)){
+//                log("skipping: " + current_name);
+                continue;
+            }
+            checked_players.add(current_name);
+            log("added: " + current_name);
+            log(executePost(hiscores_url,"player="+current_name));
+            break;
         }
 
-        log(executePost(hiscores_url,"player=Hess"));
+//        log(executePost(hiscores_url,"player=Hess"));
         return 10000;
     }
 
@@ -71,8 +82,9 @@ public class Main extends AbstractScript {
             StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
             String line;
             while ((line = rd.readLine()) != null) {
+                log(line);
                 response.append(line);
-                response.append('\r');
+                response.append("\r\n");
             }
             rd.close();
             return response.toString();
