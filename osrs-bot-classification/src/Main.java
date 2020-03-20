@@ -1,4 +1,8 @@
+import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
+import org.dreambot.api.methods.map.Tile;
+import org.dreambot.api.methods.walking.path.PathDirection;
+import org.dreambot.api.methods.walking.path.impl.LocalPath;
 import org.dreambot.api.methods.world.World;
 import org.dreambot.api.methods.world.Worlds;
 import org.dreambot.api.script.AbstractScript;
@@ -107,6 +111,7 @@ public class Main extends AbstractScript {
         return "failed";
     }
 
+    int movement_int = 1;
     @Override
     public int onLoop() {
         Players current_players = getPlayers();
@@ -158,8 +163,21 @@ public class Main extends AbstractScript {
 
         // stop script if we've got the data we need
         if(datacount > maxdatacollected){
+            log("Done collecting data!");
             stop();
         }
+
+        // walk around once in awhile
+        if (checked_players.size() % 5 == 0){
+            log("Moving about..." + getLocalPlayer().getTile().translate(movement_int, 0));
+
+            LocalPath path = new LocalPath(this);
+            path.add(getLocalPlayer().getTile().translate(movement_int, 0));
+            path.walk();
+            movement_int = -movement_int; // reverse direction next time
+        }
+
+        // wait for
 
         return 1000;
     }
