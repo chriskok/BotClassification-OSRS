@@ -19,11 +19,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-/**
- * Created by User on 03/16/2020.
- */
-
-
 @ScriptManifest(
         category = Category.UTILITY, name = "Bot Classification", author = "ChronicCoder", version = 0.1
 )
@@ -109,10 +104,10 @@ public class Main extends AbstractScript {
         return "failed";
     }
 
-    int movement_int = 1;
-    int datacount = 0;
-    int maxdatacollected = 100;
-    long startTime = System.currentTimeMillis();
+    private int movement_int = 1;
+    private int datacount = 0;
+    private int maxdatacollected = 1000;
+    private long startTime = System.currentTimeMillis();
 
     @Override
     public int onLoop() {
