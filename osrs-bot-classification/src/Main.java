@@ -73,6 +73,7 @@ public class Main extends AbstractScript {
             out.close();
             in.close();
             socket.close();
+            log("TOTAL DATA COUNT: " + datacount);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,10 +149,11 @@ public class Main extends AbstractScript {
 
         // if there are no more players to collect data from here, we change worlds
         if (current_list.size() == 0 || current_list.size() == skip_count){
-            World new_world = world_list.remove(0);
-            while (new_world.getMinimumLevel() > 0 || new_world.isHighRisk() || new_world.isPVP()){
-                new_world = world_list.remove(0);
+            World w = world_list.remove(0);
+            while (w.getMinimumLevel() > 0 || !w.isNormal()){
+                w = world_list.remove(0);
             }
+            getWorldHopper().hopWorld(w);
         }
 
         // stop script if we've got the data we need
