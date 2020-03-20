@@ -6,15 +6,12 @@ import org.dreambot.api.wrappers.interactive.Player;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * Created by User on 03/16/2020.
@@ -77,6 +74,16 @@ public class Main extends AbstractScript {
         }
     }
 
+    //Snippet Source: https://dreambot.org/forums/index.php?/topic/10595-get-other-players-equipment/
+    public static int[] getEquipped(Player p){
+        int[] appearanceData = p.getComposite().getApperance();
+        int[] equipment = new int[appearanceData.length];
+        for(int i = 0; i < equipment.length; i++){
+            equipment[i] = appearanceData[i] > 512 ? appearanceData[i]-512 : -1;
+        }
+        return equipment;
+    }
+
     public String sendMessage(String msg){
         try{
             out.print(msg);
@@ -101,19 +108,33 @@ public class Main extends AbstractScript {
         java.util.List<Player> current_list = current_players.all();
 
         for (int i = 0; i < current_list.size(); i++) {
-            String current_name = current_list.get(i).getName();
+            Player current_player = current_list.get(i);
+            String current_name = current_player.getName();
+
+            // check if player's data has already been collected
             if(checked_players.contains(current_name)){
 //                log("skipping: " + current_name);
                 continue;
             }
             checked_players.add(current_name);
             log("added: " + current_name);
+
+            // put together string of username, level, gear, location and animation
+            String data_string = current_name + "\r\n" +
+                    Arrays.toString(getEquipped(current_player)) + "\r\n" +
+                    current_player.getTile().toString() + "\r\n" +
+                    String.valueOf(current_player.getAnimation()) + "\r\n";
+
+//            log(data_string);
+
+            // finally put together hiscore data and send message
             String str_resp = executePost(hiscores_url,"player="+current_name);
             if (str_resp == null){
                 log("No hiscores data available");
             } else{
-                log(str_resp);
-                sendMessage(current_name);
+                log("sending data for: " + current_name);
+                data_string = data_string  + str_resp;
+                sendMessage(data_string);
             }
             break;
         }
