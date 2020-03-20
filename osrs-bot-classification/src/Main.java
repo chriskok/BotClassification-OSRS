@@ -33,8 +33,6 @@ public class Main extends AbstractScript {
     HashSet<String> checked_players = new HashSet<String>();
     Worlds worlds_obj = new Worlds();
     List<World> world_list = worlds_obj.f2p();
-    int datacount = 0;
-    int maxdatacollected = 100;
 
     //get the localhost IP address, if server is running on some other IP, you need to use that
     InetAddress host;
@@ -112,6 +110,10 @@ public class Main extends AbstractScript {
     }
 
     int movement_int = 1;
+    int datacount = 0;
+    int maxdatacollected = 100;
+    long startTime = System.currentTimeMillis();
+
     @Override
     public int onLoop() {
         Players current_players = getPlayers();
@@ -154,6 +156,17 @@ public class Main extends AbstractScript {
 
         // if there are no more players to collect data from here, we change worlds
         if (current_list.size() == 0 || current_list.size() == skip_count){
+
+            // check since last time we switched worlds
+            long endTime = System.currentTimeMillis();
+            long timeElapsed = endTime - startTime;
+
+            // if time since last world hop is less than 100 secs...
+            if (timeElapsed < 100 * 1000){
+                log("not enough time spent, sleeping for 100 secs");
+                sleep(100 * 1000); // sleep for 100 secs
+            }
+
             World w = world_list.remove(0);
             while (w.getMinimumLevel() > 0 || !w.isNormal()){
                 w = world_list.remove(0);
@@ -176,8 +189,6 @@ public class Main extends AbstractScript {
             path.walk();
             movement_int = -movement_int; // reverse direction next time
         }
-
-        // wait for
 
         return 1000;
     }
