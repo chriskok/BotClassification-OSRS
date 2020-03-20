@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.List;
 import java.util.HashMap;
 
+import java.io.IOException;
 
 @ScriptManifest(category = Category.MISC , name = "Bot Collector" , author = "SoWeGoOn", version = 0.01 )
 public class Main extends AbstractScript
@@ -23,14 +24,16 @@ public class Main extends AbstractScript
         return equipment;
     }
 
-
+    /*
+    Dreambot Functionality Below
+     */
     @Override
     public void onStart() {
         log("Script Started");
     }
 
     @Override
-    public int onLoop() {
+    public int onLoop()  {
         /*
         Set up the area we are monitoring, for example, the mining area west of the Dark Wizards
         south of Varrock
@@ -61,13 +64,19 @@ public class Main extends AbstractScript
                 //then clear the temporary hashmap for the next player
                 currPlayer.clear();
             }
+
         });
 
+        //Log the output for testing
+        log(playersCollected.toString());
         /*
-        MISSING:
         Add Ability to send POST request of the list to a server
          */
-        return 7000; //Amount of milliseconds the onLoop should loop
+
+        //Clear the List for the next batch of players
+        playersCollected.clear();
+
+        return 15000; //Amount of milliseconds the onLoop should loop
     }
 
     @Override
