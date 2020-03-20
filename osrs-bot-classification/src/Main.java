@@ -1,4 +1,6 @@
 import org.dreambot.api.methods.interactive.Players;
+import org.dreambot.api.methods.world.World;
+import org.dreambot.api.methods.world.Worlds;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
@@ -25,8 +27,10 @@ import java.net.UnknownHostException;
 public class Main extends AbstractScript {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
     HashSet<String> checked_players = new HashSet<String>();
-
-    Player currentTarget;
+    Worlds worlds_obj = new Worlds();
+    List<World> world_list = worlds_obj.f2p();
+    int datacount = 0;
+    int maxdatacollected = 100;
 
     //get the localhost IP address, if server is running on some other IP, you need to use that
     InetAddress host;
@@ -107,6 +111,7 @@ public class Main extends AbstractScript {
         Players current_players = getPlayers();
         java.util.List<Player> current_list = current_players.all();
 
+        int skip_count = 0;
         for (int i = 0; i < current_list.size(); i++) {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
@@ -114,6 +119,7 @@ public class Main extends AbstractScript {
             // check if player's data has already been collected
             if(checked_players.contains(current_name)){
 //                log("skipping: " + current_name);
+                skip_count++;
                 continue;
             }
             checked_players.add(current_name);
@@ -125,7 +131,6 @@ public class Main extends AbstractScript {
                     current_player.getTile().toString() + "\r\n" +
                     String.valueOf(current_player.getAnimation()) + "\r\n";
 
-//            log(data_string);
 
             // finally put together hiscore data and send message
             String str_resp = executePost(hiscores_url,"player="+current_name);
@@ -136,8 +141,24 @@ public class Main extends AbstractScript {
                 data_string = data_string  + str_resp;
                 sendMessage(data_string);
             }
+
+            datacount++;
             break;
         }
+
+        // if there are no more players to collect data from here, we change worlds
+        if (current_list.size() == 0 || current_list.size() == skip_count){
+            World new_world = world_list.remove(0);
+            while (new_world.getMinimumLevel() > 0 || new_world.isHighRisk() || new_world.isPVP()){
+                new_world = world_list.remove(0);
+            }
+        }
+
+        // stop script if we've got the data we need
+        if(datacount > maxdatacollected){
+            stop();
+        }
+
         return 1000;
     }
 
