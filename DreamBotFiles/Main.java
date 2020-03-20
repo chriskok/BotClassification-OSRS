@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class Main extends AbstractScript
 {
 
+    //Snippet Source: https://dreambot.org/forums/index.php?/topic/10595-get-other-players-equipment/
     public static int[] getEquipped(Player p){
         int[] appearanceData = p.getComposite().getApperance();
         int[] equipment = new int[appearanceData.length];
@@ -25,7 +26,7 @@ public class Main extends AbstractScript
 
     @Override
     public void onStart() {
-        log("Collecting Users");
+        log("Script Started");
     }
 
     @Override
