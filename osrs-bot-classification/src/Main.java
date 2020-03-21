@@ -105,7 +105,7 @@ public class Main extends AbstractScript {
 
     private int movement_int = 1;
     private int datacount = 0;
-    private int maxdatacollected = 1000;
+    private int maxdatacollected = 300;
     private long startTime = System.currentTimeMillis();
 
     @Override
@@ -134,7 +134,7 @@ public class Main extends AbstractScript {
                 skip_count++;
                 continue;
             }else if (!current_player.isAnimating()){
-                // wait 10 seconds for current player to animate
+                // wait 30 seconds for current player to animate
                 boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 30000);
 
                 // if we had to wait, skip this person
@@ -165,7 +165,9 @@ public class Main extends AbstractScript {
                 log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
                 String response = sendMessage(data_string);
-                if (response.equals("STOP")){
+                log("Response: " + response);
+                if (response.contains("STOP")){
+                    log("TRYING TO STOP");
                     System.exit(0);
                 }
 
@@ -233,7 +235,6 @@ public class Main extends AbstractScript {
             StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
             String line;
             while ((line = rd.readLine()) != null) {
-//                log(line);
                 response.append(line);
                 response.append("\r\n");
             }

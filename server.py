@@ -64,8 +64,8 @@ def main():
 			if not data: break
 			parseRequest(decodedRequest)
 
-			# response = "Recieved by python server!"
-			response = "STOP"
+			response = "Recieved by python server!"
+			# response = "STOP"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit
