@@ -37,7 +37,7 @@ def parseRequest(request_string):
 
 	for i in range(4, 28):
 		parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
-		
+
 	print(parsed_array)
 
 	if os.path.isfile(data_path):
@@ -46,8 +46,8 @@ def parseRequest(request_string):
 		writeToCSV(parsed_array)
 
 def main():
-	HOST = ''                 # Symbolic name meaning all available interfaces
-	PORT = 9876              # Arbitrary non-privileged port
+	HOST = ''  # Symbolic name meaning all available interfaces
+	PORT = 9876  # Arbitrary non-privileged port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind((HOST, PORT))
 	print('Server Ready')
@@ -62,10 +62,10 @@ def main():
 			decodedRequest = data.decode("utf-8")
 
 			if not data: break
-			# print( "request: {}".format(decodedRequest) )
 			parseRequest(decodedRequest)
 
-			response = "Recieved by python server!"
+			# response = "Recieved by python server!"
+			response = "STOP"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit

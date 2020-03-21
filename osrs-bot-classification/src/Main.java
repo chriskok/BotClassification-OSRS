@@ -91,10 +91,6 @@ public class Main extends AbstractScript {
             out.print(msg);
             out.flush();
             String message = (String) in.readLine();
-            log("Response: " + message);
-            if (message.equals("STOP")){
-                stop();
-            }
             return message;
 
         } catch (UnknownHostException e) {
@@ -124,11 +120,19 @@ public class Main extends AbstractScript {
 
             // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
-//                log("skipping: " + current_name);
                 skip_count++;
                 continue;
             }else if (!current_player.isAnimating()){
-                continue;
+                // wait 10 seconds for current player to animate
+                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 10000);
+
+                // if we had to wait, skip this person
+                if (!animated){
+                    log("Waited 10 seconds, skipping: " + current_name);
+                    checked_players.add(current_name);
+                    skip_count++;
+                    continue;
+                }
             }
             checked_players.add(current_name);
             log("Added: " + current_name);
@@ -147,7 +151,10 @@ public class Main extends AbstractScript {
             } else{
                 log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
-                sendMessage(data_string);
+                String response = sendMessage(data_string);
+                if (response.equals("STOP")){
+                    return -1;
+                }
 
                 datacount++;
             }
@@ -187,6 +194,7 @@ public class Main extends AbstractScript {
             LocalPath path = new LocalPath(this);
             path.add(getLocalPlayer().getTile().translate(movement_int, 0));
             path.walk();
+            sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 5000));
             movement_int = -movement_int; // reverse direction next time
         }
 
