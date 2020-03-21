@@ -117,18 +117,7 @@ public class Main extends AbstractScript {
         for (int i = 0; i < current_list.size(); i++) {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
-
-            // walk around once in awhile
-            if (checked_players.size() % 5 == 0){
-                log("Moving about..." + getLocalPlayer().getTile().translate(movement_int, 0));
-
-                LocalPath path = new LocalPath(this);
-                path.add(getLocalPlayer().getTile().translate(movement_int, 0));
-                path.walk();
-                sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 5000));
-                movement_int = -movement_int; // reverse direction next time
-            }
-
+            
             // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
                 skip_count++;
@@ -146,6 +135,16 @@ public class Main extends AbstractScript {
                 }
             }
 
+            // walk around once in awhile
+            if (checked_players.size() % 5 == 0){
+                log("Moving about..." + getLocalPlayer().getTile().translate(movement_int, 0));
+
+                LocalPath path = new LocalPath(this);
+                path.add(getLocalPlayer().getTile().translate(movement_int, 0));
+                path.walk();
+                sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 5000));
+                movement_int = -movement_int; // reverse direction next time
+            }
 
             checked_players.add(current_name);
             log("Added: " + current_name);
