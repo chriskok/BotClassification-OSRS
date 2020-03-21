@@ -92,6 +92,9 @@ public class Main extends AbstractScript {
             out.flush();
             String message = (String) in.readLine();
             log("Response: " + message);
+            if (message.equals("STOP")){
+                stop();
+            }
             return message;
 
         } catch (UnknownHostException e) {
@@ -128,7 +131,7 @@ public class Main extends AbstractScript {
                 continue;
             }
             checked_players.add(current_name);
-            log("added: " + current_name);
+            log("Added: " + current_name);
 
             // put together string of username, level, gear, location and animation
             String data_string = current_name + "\r\n" +
@@ -142,12 +145,12 @@ public class Main extends AbstractScript {
             if (str_resp == null){
                 log("No hiscores data available");
             } else{
-                log("sending data for: " + current_name);
+                log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
                 sendMessage(data_string);
-            }
 
-            datacount++;
+                datacount++;
+            }
             break;
         }
 
@@ -160,7 +163,7 @@ public class Main extends AbstractScript {
 
             // if time since last world hop is less than 100 secs...
             if (timeElapsed < 100 * 1000){
-                log("not enough time spent, sleeping for 100 secs");
+                log("Not enough time spent, sleeping for 100 secs");
                 sleep(100 * 1000); // sleep for 100 secs
             }
 
