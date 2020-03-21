@@ -118,22 +118,35 @@ public class Main extends AbstractScript {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
 
+            // walk around once in awhile
+            if (checked_players.size() % 5 == 0){
+                log("Moving about..." + getLocalPlayer().getTile().translate(movement_int, 0));
+
+                LocalPath path = new LocalPath(this);
+                path.add(getLocalPlayer().getTile().translate(movement_int, 0));
+                path.walk();
+                sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 5000));
+                movement_int = -movement_int; // reverse direction next time
+            }
+
             // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
                 skip_count++;
                 continue;
             }else if (!current_player.isAnimating()){
                 // wait 10 seconds for current player to animate
-                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 10000);
+                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 30000);
 
                 // if we had to wait, skip this person
                 if (!animated){
-                    log("Waited 10 seconds, skipping: " + current_name);
+                    log("Waited 30 seconds, skipping: " + current_name);
                     checked_players.add(current_name);
                     skip_count++;
                     continue;
                 }
             }
+
+
             checked_players.add(current_name);
             log("Added: " + current_name);
 
@@ -153,7 +166,7 @@ public class Main extends AbstractScript {
                 data_string = data_string  + str_resp;
                 String response = sendMessage(data_string);
                 if (response.equals("STOP")){
-                    return -1;
+                    System.exit(0);
                 }
 
                 datacount++;
@@ -184,18 +197,7 @@ public class Main extends AbstractScript {
         // stop script if we've got the data we need
         if(datacount > maxdatacollected){
             log("Done collecting data!");
-            stop();
-        }
-
-        // walk around once in awhile
-        if (checked_players.size() % 5 == 0){
-            log("Moving about..." + getLocalPlayer().getTile().translate(movement_int, 0));
-
-            LocalPath path = new LocalPath(this);
-            path.add(getLocalPlayer().getTile().translate(movement_int, 0));
-            path.walk();
-            sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 5000));
-            movement_int = -movement_int; // reverse direction next time
+            System.exit(0);
         }
 
         return 1000;
