@@ -119,10 +119,12 @@ public class Main extends AbstractScript {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
 
-            // check if player's data has already been collected
+            // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
 //                log("skipping: " + current_name);
                 skip_count++;
+                continue;
+            }else if (!current_player.isAnimating()){
                 continue;
             }
             checked_players.add(current_name);
