@@ -71,6 +71,7 @@ public class Main extends AbstractScript {
             in.close();
             socket.close();
             log("TOTAL DATA COUNT: " + datacount);
+            log("TOTAL CHECKED PLAYERS: " + checked_players.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -117,7 +118,7 @@ public class Main extends AbstractScript {
         for (int i = 0; i < current_list.size(); i++) {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
-            
+
             // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
                 skip_count++;
@@ -191,6 +192,9 @@ public class Main extends AbstractScript {
             World w = world_list.remove(0);
             while (w.getMinimumLevel() > 0 || !w.isNormal()){
                 w = world_list.remove(0);
+            }
+            if (world_list.size() == 0){
+                world_list = new Worlds().f2p();
             }
             getWorldHopper().hopWorld(w);
         }
