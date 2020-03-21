@@ -86,6 +86,49 @@ public class Main extends AbstractScript {
         return equipment;
     }
 
+    //Player Reporting Functionality - Added by SoWeGoOn
+    public String reportPlayer(String reportedPlayerName)
+    {
+        log("Looking for " + reportedPlayerName);
+
+        List<Player> reportedPlayer = getPlayers().all();
+        reportedPlayer.forEach(p -> {
+            if(p.getName().equals(reportedPlayerName))
+            {
+                log("Found " + reportedPlayerName + ", now following too not loose sight");
+                while(getLocalPlayer().isInteracting(p) != true)
+                {
+                    p.interact("Follow");
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                log("Following " + reportedPlayerName + ". Now reporting...");
+                p.interact("Report");
+                //Dont add the player to our ignore list
+                try {
+                    //Sleep between 1 to 3 seconds
+                    Thread.sleep((1 + new Random().nextInt(3)) * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getMouse().click(new Point(Calculations.random(271, 285), Calculations.random(124, 139)));
+                //Report the player
+                try {
+                    //Sleep between 1 to 3 seconds
+                    Thread.sleep(3000 + (int)(Math.random() * ((3000 - 1000) + 1000)));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getMouse().click(new Point(Calculations.random(37, 164), Calculations.random(288, 302)));
+                log("Reported " + reportedPlayerName + " successfully!");
+            }
+        });
+    }
+
     public String sendMessage(String msg){
         try{
             out.print(msg);
