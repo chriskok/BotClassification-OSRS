@@ -120,7 +120,7 @@ public class Main extends AbstractScript {
                 //Report the player
                 try {
                     //Sleep between 1 to 3 seconds
-                    Thread.sleep(3000 + (int)(Math.random() * ((3000 - 1000) + 1000)));
+                    Thread.sleep((1 + new Random().nextInt(3)) * 1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
