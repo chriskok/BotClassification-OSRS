@@ -55,6 +55,7 @@ def main():
 	conn, addr = s.accept()
 	print ('Connected by', addr)
 
+	req_count = 0
 	while 1:
 
 		try:
@@ -63,9 +64,10 @@ def main():
 
 			if not data: break
 			parseRequest(decodedRequest)
+			req_count += 1
 
 			response = "Recieved by python server!"
-			# response = "STOP"
+			if (req_count > 100): response = "STOP"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit
