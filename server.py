@@ -3,8 +3,12 @@ import pandas as pd
 import csv
 import os
 import ast 
+from datetime import datetime
 
-data_path = 'data/player_data.csv'
+now = datetime.now() # current date and time
+date_time = now.strftime("%m-%d-%Y_%H-%M")
+
+data_path = 'data/player_data_{}.csv'.format(date_time)
 labels = ['Name', 'Equip1', 'Equip2', 'Equip3', 'Equip4', 'Equip5', 'Equip6', 'Equip7', 'Equip8', 'Equip9', \
 	'Equip10', 'Equip11', 'Equip12', 'Loc_x', 'Loc_y', 'Anim_id', \
 		'Overall', 'Attack', 'Defence', 'Strength', 'Hitpoints', 'Ranged', 'Prayer', 'Magic', 'Cooking', 'Woodcutting', \
