@@ -10,6 +10,7 @@ import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.wrappers.interactive.Player;
 
+import java.awt.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 @ScriptManifest(
         category = Category.UTILITY, name = "Bot Classification", author = "ChronicCoder", version = 0.1
@@ -128,6 +130,8 @@ public class Main extends AbstractScript {
                 log("Reported " + reportedPlayerName + " successfully!");
             }
         });
+
+        return "done";
     }
 
     public String sendMessage(String msg){
@@ -166,18 +170,19 @@ public class Main extends AbstractScript {
             if(checked_players.contains(current_name)){
                 skip_count++;
                 continue;
-            }else if (!current_player.isAnimating()){
-                // wait 30 seconds for current player to animate
-                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 30000);
-
-                // if we had to wait, skip this person
-                if (!animated){
-                    log("Waited 30 seconds, skipping: " + current_name);
-                    checked_players.add(current_name);
-                    skip_count++;
-                    continue;
-                }
             }
+//            else if (!current_player.isAnimating()){
+//                // wait 30 seconds for current player to animate
+//                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 30000);
+//
+//                // if we had to wait, skip this person
+//                if (!animated){
+//                    log("Waited 30 seconds, skipping: " + current_name);
+//                    checked_players.add(current_name);
+//                    skip_count++;
+//                    continue;
+//                }
+//            }
 
             // walk around once in awhile
             if (checked_players.size() % 5 == 0){
