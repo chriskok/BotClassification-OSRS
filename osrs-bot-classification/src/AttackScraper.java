@@ -1,3 +1,5 @@
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.map.Area;
@@ -47,9 +49,35 @@ public class AttackScraper extends AbstractScript {
     BufferedReader in = null;
     Scanner scanner = new Scanner(System.in);
 
+    public void restoreHashSet() {
+        try {
+            //csv file containing data
+//            String strFile = "C:\\Users\\User\\Desktop\\BotClassification-OSRS\\data\\player_data_04-08-2020.csv";
+            String strFile = "C:\\Users\\User\\Desktop\\BotClassification-OSRS\\data\\player_data_03-30-2020_16-45.csv";
+
+            CSVReader reader = null;
+
+            reader = new CSVReader(new FileReader(strFile));
+            String [] nextLine;
+            int lineNumber = 0;
+            while ((nextLine = reader.readNext()) != null) {
+                lineNumber++;
+                log("Line # " + lineNumber);
+
+                // nextLine[] is an array of values from the line
+                log(nextLine[0]);
+            }
+        } catch (FileNotFoundException | CsvValidationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onStart() {
+        restoreHashSet();
+
         try {
             socket = new Socket(host.getHostName(), 9876);
             out = new PrintWriter(socket.getOutputStream(), true);
@@ -162,7 +190,7 @@ public class AttackScraper extends AbstractScript {
 
     public void changeArea(int areaID){
         getWalking().walk(area[areaID].getCenter());
-        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(5, 7), Calculations.random(3400, 4250));
+        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(2, 7), Calculations.random(4000, 8000));
     }
 
     private int movement_int = 1;
@@ -236,6 +264,10 @@ public class AttackScraper extends AbstractScript {
             log("No more players, changing to area #" + areaID);
             changeArea(areaID);
             areaID += 1;
+            if (areaID >= area.length){
+                areaID = 0;
+            }
+            return 8000;
         }
 
 //        // if there are no more players to collect data from here, we change worlds
