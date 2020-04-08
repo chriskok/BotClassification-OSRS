@@ -97,12 +97,12 @@ def main():
 
 
 			response = "Recieved by python server!"
-			if (req_count > 1000): 
+			if (req_count > 500): 
 				print("Request count exceeded, stopping. Current time: {}".format(datetime.now()))
-				response = "STOP"
+				response = "OUT"
 			if (int(time.time() - start) > 7200): 
 				print("Two hours passed, stopping. Current time: {}".format(datetime.now()))
-				response = "STOP"
+				response = "OUT"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit

@@ -217,6 +217,10 @@ public class Main extends AbstractScript {
                 if (response.contains("STOP")){
                     log("TRYING TO STOP");
                     System.exit(0);
+                } else if (response.contains("OUT")) {
+                    log("LOGGING OUT");
+                    getTabs().logout();
+                    sleep(3600 * 1000); // sleep for 3600 secs (1 hour)
                 }
 
                 datacount++;
@@ -236,6 +240,8 @@ public class Main extends AbstractScript {
                 log("Not enough time spent, sleeping for 100 secs");
                 sleep(100 * 1000); // sleep for 100 secs
             }
+
+            startTime = System.currentTimeMillis();
 
             World w = world_list.remove(0);
             while (w.getMinimumLevel() > 0 || !w.isNormal()){
