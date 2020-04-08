@@ -12,7 +12,7 @@ start = time.time()
 location = "null"
 now = datetime.now() # current date and time
 # date_time = now.strftime("%m-%d-%Y_%H-%M")
-date_time = now.strftime("%m-%d-%Y")
+date_time = now.strftime("%m-%Y")
 
 data_path = 'data/player_data_{}.csv'.format(date_time)
 labels = ['Name', 'Equip1', 'Equip2', 'Equip3', 'Equip4', 'Equip5', 'Equip6', 'Equip7', 'Equip8', 'Equip9', \
@@ -63,6 +63,18 @@ def parseRequest(request_string):
 		# print(e)
 		return False
 
+def getCheckedPlayers():
+	player_names = ""
+	first_line = True
+	with open(data_path) as f:
+		for row in f:
+			if (first_line):
+				first_line = False
+				continue
+			player_names += row.split()[0] + "\n"
+	
+	return player_names
+
 def main():
 	global location
 	if(len(sys.argv) > 1):
@@ -81,6 +93,10 @@ def main():
 	conn, addr = s.accept()
 	print ('Connected by', addr)
 
+	past_checked_players = getCheckedPlayers()
+	print("Restoring {} previously checked player names".format(past_checked_players.count("\n")))
+	conn.sendall(str.encode(past_checked_players + " \r\n")) # turn it back into bytes 
+
 	req_count = 0
 	while 1:
 
@@ -92,8 +108,6 @@ def main():
 			parse_success = parseRequest(decodedRequest)
 			if (parse_success == True):
 				req_count += 1
-			# else:
-			# 	if ('<' not in str(decodedRequest)): print(decodedRequest)
 
 
 			response = "Recieved by python server!"
@@ -113,4 +127,7 @@ def main():
 	
 
 if __name__ == "__main__":
-	main()
+	past_checked_players = getCheckedPlayers()
+	print(len(past_checked_players))
+	# conn.sendall(str.encode(past_checked_players + " \r\n")) # turn it back into bytes 
+	# main()

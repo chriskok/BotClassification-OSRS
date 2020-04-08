@@ -1,5 +1,3 @@
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.map.Area;
@@ -49,34 +47,8 @@ public class AttackScraper extends AbstractScript {
     BufferedReader in = null;
     Scanner scanner = new Scanner(System.in);
 
-    public void restoreHashSet() {
-        try {
-            //csv file containing data
-//            String strFile = "C:\\Users\\User\\Desktop\\BotClassification-OSRS\\data\\player_data_04-08-2020.csv";
-            String strFile = "C:\\Users\\User\\Desktop\\BotClassification-OSRS\\data\\player_data_03-30-2020_16-45.csv";
-
-            CSVReader reader = null;
-
-            reader = new CSVReader(new FileReader(strFile));
-            String [] nextLine;
-            int lineNumber = 0;
-            while ((nextLine = reader.readNext()) != null) {
-                lineNumber++;
-                log("Line # " + lineNumber);
-
-                // nextLine[] is an array of values from the line
-                log(nextLine[0]);
-            }
-        } catch (FileNotFoundException | CsvValidationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onStart() {
-        restoreHashSet();
 
         try {
             socket = new Socket(host.getHostName(), 9876);
@@ -86,6 +58,8 @@ public class AttackScraper extends AbstractScript {
             BufferedReader stdIn = new BufferedReader(
                     new InputStreamReader(System.in));
 
+            String message = (String) in.readLine();
+            log("RECIEVED INITIAL MESSAGE: " + message);
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {
