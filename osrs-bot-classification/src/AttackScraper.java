@@ -209,7 +209,7 @@ public class AttackScraper extends AbstractScript {
             }
 
             checked_players.add(current_name);
-            log("Added: " + current_name);
+            log("Added: " + current_name + " (" + i + " of " + current_list.size() + ")");
 
             // put together string of username, level, gear, location and animation
             String data_string = current_name + "\r\n" +
@@ -223,10 +223,10 @@ public class AttackScraper extends AbstractScript {
             if (str_resp == null){
                 log("No hiscores data available");
             } else{
-                log("Sending data for: " + current_name);
+//                log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
                 String response = sendMessage(data_string);
-                log("Response: " + response);
+//                log("Response: " + response);
                 if (response.contains("STOP")){
                     log("TRYING TO STOP");
                     System.exit(0);
@@ -242,15 +242,13 @@ public class AttackScraper extends AbstractScript {
         }
 
 
-        if (current_list.size() == 0 || current_list.size() == skip_count) {
-            log("No more players, changing to area #" + areaID);
-            changeArea(areaID);
-            areaID += 1;
-            if (areaID >= area.length){
-                areaID = 0;
-            }
-            return 8000;
+        log("No more players, changing to area #" + areaID);
+        changeArea(areaID);
+        areaID += 1;
+        if (areaID >= area.length){
+            areaID = 0;
         }
+        return 8000;
 
 //        // if there are no more players to collect data from here, we change worlds
 //        if (current_list.size() == 0 || current_list.size() == skip_count){
@@ -279,7 +277,7 @@ public class AttackScraper extends AbstractScript {
 //            getWorldHopper().hopWorld(w);
 //        }
 
-        return 1000;
+//        return 1000;
     }
 
     public static String executePost(String targetURL, String urlParameters) {
