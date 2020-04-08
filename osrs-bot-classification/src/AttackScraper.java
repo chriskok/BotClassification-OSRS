@@ -172,7 +172,8 @@ public class AttackScraper extends AbstractScript {
 
     public void changeArea(int areaID){
         getWalking().walk(area[areaID].getCenter());
-        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(2, 7), Calculations.random(4000, 8000));
+        sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 8000));
+//        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(2, 7), Calculations.random(4000, 8000));
     }
 
     private int movement_int = 1;
@@ -209,7 +210,7 @@ public class AttackScraper extends AbstractScript {
             }
 
             checked_players.add(current_name);
-            log("Added: " + current_name + " (" + i + " of " + current_list.size() + ")");
+            log("Added: " + current_name);
 
             // put together string of username, level, gear, location and animation
             String data_string = current_name + "\r\n" +
@@ -221,7 +222,7 @@ public class AttackScraper extends AbstractScript {
             // finally put together hiscore data and send message
             String str_resp = executePost(hiscores_url,"player="+current_name);
             if (str_resp == null){
-                log("No hiscores data available");
+//                log("No hiscores data available");
             } else{
 //                log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
@@ -241,11 +242,10 @@ public class AttackScraper extends AbstractScript {
             break;
         }
 
-
         log("No more players, changing to area #" + areaID);
         changeArea(areaID);
         areaID += 1;
-        if (areaID >= area.length){
+        if (areaID >= area.length) {
             areaID = 0;
         }
         return 8000;
