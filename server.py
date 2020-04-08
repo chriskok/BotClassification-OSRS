@@ -8,7 +8,8 @@ from datetime import datetime
 
 location = "null"
 now = datetime.now() # current date and time
-date_time = now.strftime("%m-%d-%Y_%H-%M")
+# date_time = now.strftime("%m-%d-%Y_%H-%M")
+date_time = now.strftime("%m-%d-%Y")
 
 data_path = 'data/player_data_{}.csv'.format(date_time)
 labels = ['Name', 'Equip1', 'Equip2', 'Equip3', 'Equip4', 'Equip5', 'Equip6', 'Equip7', 'Equip8', 'Equip9', \
@@ -31,27 +32,33 @@ def appendToCSV(data):
 def parseRequest(request_string):
 	global location 
 
-	parsed_array = []
-	request_arr = request_string.split('\r\n')
-	request_arr[1] = ast.literal_eval(request_arr[1]) # convert equipment list to array
-	request_arr[2] = ast.literal_eval(request_arr[2]) # convert tuple to array
+	try:
+		parsed_array = []
+		request_arr = request_string.split('\r\n')
+		request_arr[1] = ast.literal_eval(request_arr[1]) # convert equipment list to array
+		request_arr[2] = ast.literal_eval(request_arr[2]) # convert tuple to array
 
-	parsed_array.append(request_arr[0]) # add the name
-	parsed_array.extend(request_arr[1]) # add each item (should be 12)
-	parsed_array.append(request_arr[2][0]) # add the location tile x value
-	parsed_array.append(request_arr[2][1]) # add the location tile y value
-	parsed_array.append(request_arr[3]) # add the animation id
+		parsed_array.append(request_arr[0]) # add the name
+		parsed_array.extend(request_arr[1]) # add each item (should be 12)
+		parsed_array.append(request_arr[2][0]) # add the location tile x value
+		parsed_array.append(request_arr[2][1]) # add the location tile y value
+		parsed_array.append(request_arr[3]) # add the animation id
 
-	for i in range(4, 28):
-		parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
+		for i in range(4, 28):
+			parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
 
-	parsed_array.append(location)
-	print(parsed_array)
+		parsed_array.append(location)
+		print(parsed_array)
 
-	if os.path.isfile(data_path):
-		appendToCSV(parsed_array)
-	else:
-		writeToCSV(parsed_array)
+		if os.path.isfile(data_path):
+			appendToCSV(parsed_array)
+		else:
+			writeToCSV(parsed_array)
+		
+		return True
+	except Exception as e:
+		# print(e)
+		return False
 
 def main():
 	global location
@@ -61,7 +68,7 @@ def main():
 	else:
 		print('Please select location based on expected skill - mining, woodcutting, none')
 		return
-		
+
 	HOST = ''  # Symbolic name meaning all available interfaces
 	PORT = 9876  # Arbitrary non-privileged port
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -77,13 +84,17 @@ def main():
 		try:
 			data = conn.recv(1024)
 			decodedRequest = data.decode("utf-8")
-
 			if not data: break
-			parseRequest(decodedRequest)
-			req_count += 1
+
+			parse_success = parseRequest(decodedRequest)
+			if (parse_success == True):
+				req_count += 1
+			# else:
+			# 	if ('<' not in str(decodedRequest)): print(decodedRequest)
+
 
 			response = "Recieved by python server!"
-			if (req_count > 100): response = "STOP"
+			if (req_count > 1000): response = "STOP"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit

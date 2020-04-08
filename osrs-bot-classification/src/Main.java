@@ -153,7 +153,7 @@ public class Main extends AbstractScript {
 
     private int movement_int = 1;
     private int datacount = 0;
-    private int maxdatacollected = 300;
+    private int maxdatacollected = 5000;
     private long startTime = System.currentTimeMillis();
 
     @Override
@@ -247,11 +247,11 @@ public class Main extends AbstractScript {
             getWorldHopper().hopWorld(w);
         }
 
-        // stop script if we've got the data we need
-        if(datacount > maxdatacollected){
-            log("Done collecting data!");
-            System.exit(0);
-        }
+//        // stop script if we've got the data we need
+//        if(datacount > maxdatacollected){
+//            log("Done collecting data!");
+//            System.exit(0);
+//        }
 
         return 1000;
     }
