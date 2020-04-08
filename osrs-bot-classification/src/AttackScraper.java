@@ -47,6 +47,14 @@ public class AttackScraper extends AbstractScript {
     BufferedReader in = null;
     Scanner scanner = new Scanner(System.in);
 
+    public void addCheckedPlayers(String players){
+        String[] lines = players.split(",");
+        for (String line : lines) {
+            checked_players.add(line);
+        }
+        log("Added " + checked_players.size() + " previous players");
+    }
+
     @Override
     public void onStart() {
 
@@ -59,7 +67,7 @@ public class AttackScraper extends AbstractScript {
                     new InputStreamReader(System.in));
 
             String message = (String) in.readLine();
-            log("RECIEVED INITIAL MESSAGE: " + message);
+            addCheckedPlayers(message);
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {

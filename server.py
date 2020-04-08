@@ -71,7 +71,7 @@ def getCheckedPlayers():
 			if (first_line):
 				first_line = False
 				continue
-			player_names += row.split()[0] + "\n"
+			player_names += row.split(',')[0] + ","
 	
 	return player_names
 
@@ -94,7 +94,7 @@ def main():
 	print ('Connected by', addr)
 
 	past_checked_players = getCheckedPlayers()
-	print("Restoring {} previously checked player names".format(past_checked_players.count("\n")))
+	print("Restoring {} previously checked player names".format(past_checked_players.count(",")))
 	conn.sendall(str.encode(past_checked_players + " \r\n")) # turn it back into bytes 
 
 	req_count = 0
@@ -127,7 +127,7 @@ def main():
 	
 
 if __name__ == "__main__":
-	past_checked_players = getCheckedPlayers()
-	print(len(past_checked_players))
-	# conn.sendall(str.encode(past_checked_players + " \r\n")) # turn it back into bytes 
-	# main()
+	
+	# past_checked_players = getCheckedPlayers()
+	# print(past_checked_players[0:100])
+	main()
