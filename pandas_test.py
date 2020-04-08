@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = pd.read_csv('data/player_data_04-07-2020.csv')  
+data = pd.read_csv('data/player_data_04-08-2020.csv')  
 
 print(data.shape)
 
