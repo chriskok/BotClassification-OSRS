@@ -1,5 +1,6 @@
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
+import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.methods.map.Tile;
 import org.dreambot.api.methods.walking.path.PathDirection;
 import org.dreambot.api.methods.walking.path.impl.LocalPath;
@@ -22,10 +23,10 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 @ScriptManifest(
-        category = Category.UTILITY, name = "Bot Classification", author = "ChronicCoder", version = 0.1
+        category = Category.UTILITY, name = "Attack Scraper", author = "ChronicCoder", version = 0.1
 )
 
-public class Main extends AbstractScript {
+public class AttackScraper extends AbstractScript {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
     HashSet<String> checked_players = new HashSet<String>();
     Worlds worlds_obj = new Worlds();
@@ -151,10 +152,24 @@ public class Main extends AbstractScript {
         return "failed";
     }
 
+    private Area[] area = {
+            new Area(3252, 3287, 3260, 3282),
+            new Area(3258, 3266, 3261, 3263),
+            new Area(3233, 3295, 3235, 3292),
+            new Area(3248, 3238, 3251, 3236),
+            new Area(3245, 3254, 3247, 3252)
+    };
+
+    public void changeArea(int areaID){
+        getWalking().walk(area[areaID].getCenter());
+        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(5, 7), Calculations.random(3400, 4250));
+    }
+
     private int movement_int = 1;
     private int datacount = 0;
     private int maxdatacollected = 5000;
     private long startTime = System.currentTimeMillis();
+    private int areaID = 0;
 
     @Override
     public int onLoop() {
@@ -171,18 +186,6 @@ public class Main extends AbstractScript {
                 skip_count++;
                 continue;
             }
-//            else if (!current_player.isAnimating()){
-//                // wait 30 seconds for current player to animate
-//                boolean animated = sleepUntil(() -> current_player.getAnimation() != -1, 30000);
-//
-//                // if we had to wait, skip this person
-//                if (!animated){
-//                    log("Waited 30 seconds, skipping: " + current_name);
-//                    checked_players.add(current_name);
-//                    skip_count++;
-//                    continue;
-//                }
-//            }
 
             // walk around once in awhile
             if (checked_players.size() % 5 == 0){
@@ -228,32 +231,39 @@ public class Main extends AbstractScript {
             break;
         }
 
-        // if there are no more players to collect data from here, we change worlds
-        if (current_list.size() == 0 || current_list.size() == skip_count){
 
-            // check since last time we switched worlds
-            long endTime = System.currentTimeMillis();
-            long timeElapsed = endTime - startTime;
-
-            // if time since last world hop is less than 100 secs...
-            if (timeElapsed < 100 * 1000){
-                // log("Not enough time spent, sleeping for 100 secs");
-                sleep(100 * 1000); // sleep for 100 secs
-                return 10000;
-            }
-
-            startTime = System.currentTimeMillis();
-
-            World w = world_list.remove(0);
-            while (w.getMinimumLevel() > 0 || !w.isNormal()){
-                w = world_list.remove(0);
-            }
-            if (world_list.size() == 0){
-                world_list = new Worlds().f2p();
-            }
-            log("Hopping to world: " + w.toString());
-            getWorldHopper().hopWorld(w);
+        if (current_list.size() == 0 || current_list.size() == skip_count) {
+            log("No more players, changing to area #" + areaID);
+            changeArea(areaID);
+            areaID += 1;
         }
+
+//        // if there are no more players to collect data from here, we change worlds
+//        if (current_list.size() == 0 || current_list.size() == skip_count){
+//
+//            // check since last time we switched worlds
+//            long endTime = System.currentTimeMillis();
+//            long timeElapsed = endTime - startTime;
+//
+//            // if time since last world hop is less than 100 secs...
+//            if (timeElapsed < 100 * 1000){
+//                // log("Not enough time spent, sleeping for 100 secs");
+//                sleep(100 * 1000); // sleep for 100 secs
+//                return 10000;
+//            }
+//
+//            startTime = System.currentTimeMillis();
+//
+//            World w = world_list.remove(0);
+//            while (w.getMinimumLevel() > 0 || !w.isNormal()){
+//                w = world_list.remove(0);
+//            }
+//            if (world_list.size() == 0){
+//                world_list = new Worlds().f2p();
+//            }
+//            log("Hopping to world: " + w.toString());
+//            getWorldHopper().hopWorld(w);
+//        }
 
         return 1000;
     }
