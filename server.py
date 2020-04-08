@@ -5,6 +5,9 @@ import os
 import ast 
 import sys
 from datetime import datetime
+import time
+
+start = time.time()
 
 location = "null"
 now = datetime.now() # current date and time
@@ -94,7 +97,12 @@ def main():
 
 
 			response = "Recieved by python server!"
-			if (req_count > 1000): response = "STOP"
+			if (req_count > 1000): 
+				print("Request count exceeded, stopping. Current time: {}".format(datetime.now()))
+				response = "STOP"
+			if (int(time.time() - start) > 7200): 
+				print("Two hours passed, stopping. Current time: {}".format(datetime.now()))
+				response = "STOP"
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit
