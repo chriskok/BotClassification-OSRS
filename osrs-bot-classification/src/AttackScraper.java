@@ -248,7 +248,7 @@ public class AttackScraper extends AbstractScript {
 
                 datacount++;
             }
-            break;
+//            break;
         }
 
         log("No more players, changing to area #" + areaID);

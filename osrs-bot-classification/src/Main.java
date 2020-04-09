@@ -263,7 +263,7 @@ public class Main extends AbstractScript {
 
                 datacount++;
             }
-            break;
+//            break;
         }
 
         // check since last time we switched worlds

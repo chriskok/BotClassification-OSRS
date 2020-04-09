@@ -170,7 +170,6 @@ public class WoodcuttingScraper extends AbstractScript {
 
     private int movement_int = 1;
     private int datacount = 0;
-    private int maxdatacollected = 5000;
     private long startTime = System.currentTimeMillis();
     private int areaID = 0;
 
@@ -186,14 +185,15 @@ public class WoodcuttingScraper extends AbstractScript {
         Players current_players = getPlayers();
         List<Player> current_list = current_players.all();
 
-        int skip_count = 0;
+        log(current_list.toString());
+
         for (int i = 0; i < current_list.size(); i++) {
             Player current_player = current_list.get(i);
             String current_name = current_player.getName();
 
+
             // check if player's data has already been collected or if they are not animating
             if(checked_players.contains(current_name)){
-                skip_count++;
                 continue;
             }
 
@@ -236,7 +236,6 @@ public class WoodcuttingScraper extends AbstractScript {
 
                 datacount++;
             }
-            break;
         }
 
         log("No more players, changing to area #" + areaID);
