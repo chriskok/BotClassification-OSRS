@@ -189,6 +189,13 @@ public class Main extends AbstractScript {
 
     @Override
     public int onLoop() {
+
+        // if we somehow get lost or die
+        if(!area[areaID].contains(getLocalPlayer())){
+            log("Heading back to area #" + areaID);
+            changeArea(areaID);
+        }
+
         Players current_players = getPlayers();
         java.util.List<Player> current_list = current_players.all();
 
