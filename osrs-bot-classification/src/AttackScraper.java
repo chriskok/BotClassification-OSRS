@@ -171,9 +171,12 @@ public class AttackScraper extends AbstractScript {
     };
 
     public void changeArea(int areaID){
-        getWalking().walk(area[areaID].getCenter());
-        sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(3000, 8000));
-//        sleepUntil(() -> getWalking().getDestination().distance() < Calculations.random(2, 7), Calculations.random(4000, 8000));
+
+        while(!area[areaID].contains(getLocalPlayer())) {
+            getWalking().walk(area[areaID].getRandomTile());
+
+            sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(4000, 8000));
+        }
     }
 
     private int movement_int = 1;

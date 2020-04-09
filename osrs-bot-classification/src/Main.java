@@ -46,6 +46,13 @@ public class Main extends AbstractScript {
     BufferedReader in = null;
     Scanner scanner = new Scanner(System.in);
 
+    public void addCheckedPlayers(String players){
+        String[] lines = players.split(",");
+        for (String line : lines) {
+            checked_players.add(line);
+        }
+        log("Added " + checked_players.size() + " previous players");
+    }
 
     @Override
     public void onStart() {
@@ -57,6 +64,8 @@ public class Main extends AbstractScript {
             BufferedReader stdIn = new BufferedReader(
                     new InputStreamReader(System.in));
 
+            String message = (String) in.readLine();
+            addCheckedPlayers(message);
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {
@@ -228,32 +237,28 @@ public class Main extends AbstractScript {
             break;
         }
 
-        // if there are no more players to collect data from here, we change worlds
-        if (current_list.size() == 0 || current_list.size() == skip_count){
+        // check since last time we switched worlds
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime - startTime;
 
-            // check since last time we switched worlds
-            long endTime = System.currentTimeMillis();
-            long timeElapsed = endTime - startTime;
-
-            // if time since last world hop is less than 100 secs...
-            if (timeElapsed < 100 * 1000){
-                // log("Not enough time spent, sleeping for 100 secs");
-                sleep(100 * 1000); // sleep for 100 secs
-                return 10000;
-            }
-
-            startTime = System.currentTimeMillis();
-
-            World w = world_list.remove(0);
-            while (w.getMinimumLevel() > 0 || !w.isNormal()){
-                w = world_list.remove(0);
-            }
-            if (world_list.size() == 0){
-                world_list = new Worlds().f2p();
-            }
-            log("Hopping to world: " + w.toString());
-            getWorldHopper().hopWorld(w);
+        // if time since last world hop is less than 100 secs...
+        if (timeElapsed < 100 * 1000){
+            // log("Not enough time spent, sleeping for 100 secs");
+            sleep(100 * 1000); // sleep for 100 secs
+            return 5000;
         }
+
+        startTime = System.currentTimeMillis();
+
+        World w = world_list.remove(0);
+        while (w.getMinimumLevel() > 0 || !w.isNormal()){
+            w = world_list.remove(0);
+        }
+        if (world_list.size() == 0){
+            world_list = new Worlds().f2p();
+        }
+        log("Hopping to world: " + w.toString());
+        getWorldHopper().hopWorld(w);
 
         return 1000;
     }
