@@ -1,5 +1,6 @@
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
+import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.methods.map.Tile;
 import org.dreambot.api.methods.walking.path.PathDirection;
 import org.dreambot.api.methods.walking.path.impl.LocalPath;
@@ -160,10 +161,26 @@ public class Main extends AbstractScript {
         return "failed";
     }
 
+    private Area[] area = {
+            new Area(3284, 3366, 3288, 3363),
+            new Area(3178, 3372, 3181, 3369),
+            new Area(3226, 3147, 3229, 3145)
+    };
+
+    public void changeArea(int areaID){
+
+        while(!area[areaID].contains(getLocalPlayer())) {
+            getWalking().walk(area[areaID].getRandomTile());
+
+            sleepUntil(() -> !getLocalPlayer().isMoving(), Calculations.random(4000, 8000));
+        }
+    }
+
     private int movement_int = 1;
     private int datacount = 0;
     private int maxdatacollected = 5000;
     private long startTime = System.currentTimeMillis();
+    private int areaID = 0;
 
     @Override
     public int onLoop() {
@@ -256,6 +273,13 @@ public class Main extends AbstractScript {
         }
         if (world_list.size() == 0){
             world_list = new Worlds().f2p();
+            log("Went through all worlds, changing to area #" + areaID);
+            changeArea(areaID);
+            areaID += 1;
+            if (areaID >= area.length) {
+                areaID = 0;
+            }
+            return 8000;
         }
         log("Hopping to world: " + w.toString());
         getWorldHopper().hopWorld(w);
