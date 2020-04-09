@@ -241,11 +241,11 @@ public class Main extends AbstractScript {
         long endTime = System.currentTimeMillis();
         long timeElapsed = endTime - startTime;
 
-        // if time since last world hop is less than 100 secs...
-        if (timeElapsed < 100 * 1000){
-            // log("Not enough time spent, sleeping for 100 secs");
-            sleep(100 * 1000); // sleep for 100 secs
-            return 5000;
+        // if time since last world hop is less than certain amount of time...
+        if (timeElapsed < 60 * 1000){
+//            log("Not enough time spent, sleeping for 10 more secs");
+//            sleep(100 * 1000); // sleep for 100 secs
+            return 10000;
         }
 
         startTime = System.currentTimeMillis();
