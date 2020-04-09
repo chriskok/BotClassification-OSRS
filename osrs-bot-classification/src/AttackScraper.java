@@ -262,37 +262,30 @@ public class AttackScraper extends AbstractScript {
         areaID += 1;
         if (areaID >= area.length) {
             areaID = 0;
+
+            // check since last time we switched worlds
+            long endTime = System.currentTimeMillis();
+            long timeElapsed = endTime - startTime;
+
+            // if time since last world hop is less than certain amount of time...
+            if (timeElapsed < 60 * 1000){
+                return 10000;
+            }
+
+            startTime = System.currentTimeMillis();
+
+            World w = world_list.remove(0);
+            while (w.getMinimumLevel() > 0 || !w.isNormal()){
+                w = world_list.remove(0);
+            }
+            if (world_list.size() == 0){
+                world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
+            }
+            log("Hopping to world: " + w.toString());
+            getWorldHopper().hopWorld(w);
         }
-        return 8000;
+        return 1000;
 
-//        // if there are no more players to collect data from here, we change worlds
-//        if (current_list.size() == 0 || current_list.size() == skip_count){
-//
-//            // check since last time we switched worlds
-//            long endTime = System.currentTimeMillis();
-//            long timeElapsed = endTime - startTime;
-//
-//            // if time since last world hop is less than 100 secs...
-//            if (timeElapsed < 100 * 1000){
-//                // log("Not enough time spent, sleeping for 100 secs");
-//                sleep(100 * 1000); // sleep for 100 secs
-//                return 10000;
-//            }
-//
-//            startTime = System.currentTimeMillis();
-//
-//            World w = world_list.remove(0);
-//            while (w.getMinimumLevel() > 0 || !w.isNormal()){
-//                w = world_list.remove(0);
-//            }
-//            if (world_list.size() == 0){
-//                world_list = new Worlds().f2p();
-//            }
-//            log("Hopping to world: " + w.toString());
-//            getWorldHopper().hopWorld(w);
-//        }
-
-//        return 1000;
     }
 
     public static String executePost(String targetURL, String urlParameters) {
