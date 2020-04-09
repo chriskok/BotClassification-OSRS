@@ -74,6 +74,12 @@ public class AttackScraper extends AbstractScript {
             System.err.println("Couldn't get I/O for "
                     + "the connection.");
         }
+
+        changeArea(areaID);
+        areaID += 1;
+        if (areaID >= area.length) {
+            areaID = 0;
+        }
     }
 
     @Override

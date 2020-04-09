@@ -29,8 +29,9 @@ import java.util.List;
 public class Main extends AbstractScript {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
     HashSet<String> checked_players = new HashSet<String>();
-    Worlds worlds_obj = new Worlds();
-    List<World> world_list = worlds_obj.f2p();
+//    Worlds worlds_obj = new Worlds();
+//    List<World> world_list = worlds_obj.f2p();
+    List<World> world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
 
     //get the localhost IP address, if server is running on some other IP, you need to use that
     InetAddress host;
@@ -73,6 +74,14 @@ public class Main extends AbstractScript {
             System.err.println("Couldn't get I/O for "
                     + "the connection.");
         }
+
+        changeArea(areaID);
+        areaID += 1;
+        if (areaID >= area.length) {
+            areaID = 0;
+        }
+
+        log(world_list.toString());
     }
 
     @Override
@@ -272,7 +281,7 @@ public class Main extends AbstractScript {
             w = world_list.remove(0);
         }
         if (world_list.size() == 0){
-            world_list = new Worlds().f2p();
+            world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
             log("Went through all worlds, changing to area #" + areaID);
             changeArea(areaID);
             areaID += 1;
