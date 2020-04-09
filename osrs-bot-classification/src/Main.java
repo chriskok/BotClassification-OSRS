@@ -73,11 +73,11 @@ public class Main extends AbstractScript {
                     + "the connection.");
         }
 
-        changeArea(areaID);
-        areaID += 1;
-        if (areaID >= area.length) {
-            areaID = 0;
-        }
+//        changeArea(areaID);
+//        areaID += 1;
+//        if (areaID >= area.length) {
+//            areaID = 0;
+//        }
     }
 
     @Override

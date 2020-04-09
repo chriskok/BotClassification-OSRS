@@ -1,8 +1,6 @@
 import org.dreambot.api.methods.Calculations;
 import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.map.Area;
-import org.dreambot.api.methods.map.Tile;
-import org.dreambot.api.methods.walking.path.PathDirection;
 import org.dreambot.api.methods.walking.path.impl.LocalPath;
 import org.dreambot.api.methods.world.World;
 import org.dreambot.api.methods.world.Worlds;
@@ -12,21 +10,16 @@ import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.wrappers.interactive.Player;
 
 import java.awt.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.*;
-
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.*;
 import java.util.List;
 
 @ScriptManifest(
-        category = Category.UTILITY, name = "Attack Scraper", author = "ChronicCoder", version = 0.1
+        category = Category.UTILITY, name = "Woodcutting Scraper", author = "ChronicCoder", version = 0.1
 )
 
-public class AttackScraper extends AbstractScript {
+public class WoodcuttingScraper extends AbstractScript {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
     HashSet<String> checked_players = new HashSet<String>();
     List<World> world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
@@ -161,12 +154,9 @@ public class AttackScraper extends AbstractScript {
         return "failed";
     }
 
-    private Area[] area = {
-            new Area(3252, 3287, 3260, 3282),
-            new Area(3258, 3266, 3261, 3263),
-            new Area(3233, 3295, 3235, 3292),
-            new Area(3248, 3238, 3251, 3236),
-            new Area(3245, 3254, 3247, 3252)
+    Area[] area = {
+            new Area(3093, 3241, 3094, 3242),
+            new Area(3142, 3231, 3147, 3227)
     };
 
     public void changeArea(int areaID){
@@ -194,7 +184,7 @@ public class AttackScraper extends AbstractScript {
         }
 
         Players current_players = getPlayers();
-        java.util.List<Player> current_list = current_players.all();
+        List<Player> current_list = current_players.all();
 
         int skip_count = 0;
         for (int i = 0; i < current_list.size(); i++) {
@@ -233,10 +223,8 @@ public class AttackScraper extends AbstractScript {
             if (str_resp == null){
 //                log("No hiscores data available");
             } else{
-//                log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
                 String response = sendMessage(data_string);
-//                log("Response: " + response);
                 if (response.contains("STOP")){
                     log("TRYING TO STOP");
                     System.exit(0);
