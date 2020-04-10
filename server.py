@@ -76,7 +76,7 @@ def getCheckedPlayers():
 	return player_names
 
 def main():
-	global location
+	global location, start
 	if(len(sys.argv) > 1):
 		location = sys.argv[1]
 		print('Location: {}'.format(location))
@@ -117,6 +117,7 @@ def main():
 			if (int(time.time() - start) > 7200): 
 				print("Two hours passed, stopping. Current time: {}".format(datetime.now()))
 				response = "OUT"
+				start = time.time()
 			conn.sendall(str.encode(response + " \r\n")) # turn it back into bytes 
 
 		# Press ctrl-c or ctrl-d on the keyboard to exit
