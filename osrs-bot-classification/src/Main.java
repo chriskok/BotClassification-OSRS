@@ -23,7 +23,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 @ScriptManifest(
-        category = Category.UTILITY, name = "Bot Classification", author = "ChronicCoder", version = 0.1
+        category = Category.UTILITY, name = "Mining Scraper", author = "ChronicCoder", version = 0.1
 )
 
 public class Main extends AbstractScript {
@@ -258,7 +258,9 @@ public class Main extends AbstractScript {
                 } else if (response.contains("OUT")) {
                     log("LOGGING OUT");
                     getTabs().logout();
+                    getRandomManager().disableSolver("LOGIN");
                     sleep(3600 * 1000); // sleep for 3600 secs (1 hour)
+                    getRandomManager().enableSolver("LOGIN");
                 }
 
                 datacount++;

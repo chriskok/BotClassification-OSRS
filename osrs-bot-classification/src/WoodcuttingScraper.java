@@ -231,7 +231,9 @@ public class WoodcuttingScraper extends AbstractScript {
                 } else if (response.contains("OUT")) {
                     log("LOGGING OUT");
                     getTabs().logout();
+                    getRandomManager().disableSolver("LOGIN");
                     sleep(3600 * 1000); // sleep for 3600 secs (1 hour)
+                    getRandomManager().enableSolver("LOGIN");
                 }
 
                 datacount++;
