@@ -32,8 +32,8 @@
       <file leaf-file-name="ArtChatBot.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ArtChatBot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="26" column="33" lean-forward="false" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+            <state relative-caret-position="580">
+              <caret line="80" column="39" lean-forward="false" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -80,9 +80,11 @@
     <findStrings>
       <find>areaID</find>
       <find>+</find>
+      <find>,</find>
     </findStrings>
     <replaceStrings>
       <replace>,</replace>
+      <replace>,\n</replace>
     </replaceStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -801,8 +803,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ArtChatBot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="26" column="33" lean-forward="false" selection-start-line="26" selection-start-column="33" selection-end-line="26" selection-end-column="33" />
+        <state relative-caret-position="580">
+          <caret line="80" column="39" lean-forward="false" selection-start-line="80" selection-start-column="39" selection-end-line="80" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
