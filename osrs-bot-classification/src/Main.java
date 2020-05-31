@@ -34,6 +34,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
     HashSet<String> checked_players = new HashSet<String>();
     List<World> world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
     Hashtable<String, String> message_dict = new Hashtable<String, String>();
+    Boolean promptBots = false;
 
     //get the localhost IP address, if server is running on some other IP, you need to use that
     InetAddress host;
@@ -81,7 +82,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             String message = (String) in.readLine();
             addCheckedPlayers(message);
 
-            askPlayers();
+            if (promptBots){askPlayers();}
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {
@@ -193,6 +194,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
     }
 
     public void askPlayers(){
+        sleep(Calculations.random(10000, 12000));
         getKeyboard().type("Anyone here not a bot?", true);
         sleep(Calculations.random(3000, 7000));
     }
@@ -307,6 +309,26 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             String str_resp = executePost(hiscores_url,"player="+current_name);
             if (str_resp == null){
                 log("No hiscores data available");
+
+                log("Sending data for: " + current_name);
+                // Quick fix, please don't @ me. I am just trying to get every name available regardless of hiscore data
+                data_string = data_string  +"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+
+                        "\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+
+                        "\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n";
+                String response = sendMessage(data_string);
+                log("Response: " + response);
+                if (response.contains("STOP")){
+                    log("TRYING TO STOP");
+                    System.exit(0);
+                } else if (response.contains("OUT")) {
+                    log("LOGGING OUT");
+                    getTabs().logout();
+                    getRandomManager().disableSolver("LOGIN");
+                    sleep(3600 * 1000); // sleep for 3600 secs (1 hour)
+                    getRandomManager().enableSolver("LOGIN");
+                }
+
+                datacount++;
             } else{
                 log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
@@ -353,14 +375,14 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             if (areaID >= area.length) {
                 areaID = 0;
             }
-            askPlayers();
+            if (promptBots){askPlayers();}
 
             return 8000;
         }
         log("Hopping to world: " + w.toString());
         getWorldHopper().hopWorld(w);
 
-        askPlayers();
+        if (promptBots){askPlayers();}
 
         return 1000;
     }
