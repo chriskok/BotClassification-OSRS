@@ -193,9 +193,8 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
     }
 
     public void askPlayers(){
-        getKeyboard().type("Hey! How are ya'll doing?", true);
-        sleep(Calculations.random(15000, 23000));
-        getKeyboard().type("How many bots do you think are here?", true);
+        getKeyboard().type("Anyone here not a bot?", true);
+        sleep(Calculations.random(3000, 7000));
     }
 
     @Override
@@ -347,7 +346,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             w = world_list.remove(0);
         }
         if (world_list.size() == 0){
-            world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
+            world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 500);
             log("Went through all worlds, changing to area #" + areaID);
             changeArea(areaID);
             areaID += 1;
