@@ -48,8 +48,12 @@ def parseRequest(request_string):
 		parsed_array.append(request_arr[3]) # add the animation id
 		parsed_array.append(request_arr[4]) # add the chat response
 
-		for i in range(5, 29):
-			parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
+		if (not request_arr[5].split(',')[0].isnumeric()):
+			for i in range(5, 29):
+				parsed_array.append('0') # insert fake hiscore data, just 0 so we know it's wrong
+		else:
+			for i in range(5, 29):
+				parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
 
 		parsed_array.append(location)
 		print(parsed_array)
@@ -61,6 +65,9 @@ def parseRequest(request_string):
 		
 		return True
 	except Exception as e:
+		# request_arr = request_string.split('\r\n')
+		# print(request_arr)
+		# print(len(request_arr))
 		# print(e)
 		return False
 

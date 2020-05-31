@@ -314,7 +314,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
                 // Quick fix, please don't @ me. I am just trying to get every name available regardless of hiscore data
                 data_string = data_string  +"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+
                         "\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+
-                        "\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n";
+                        "\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0"+"\r\n"+"0";
                 String response = sendMessage(data_string);
                 log("Response: " + response);
                 if (response.contains("STOP")){
