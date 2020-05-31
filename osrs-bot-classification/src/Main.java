@@ -9,7 +9,10 @@ import org.dreambot.api.methods.world.Worlds;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
+import org.dreambot.api.script.listener.AdvancedMessageListener;
 import org.dreambot.api.wrappers.interactive.Player;
+import org.dreambot.api.wrappers.widgets.message.Message;
+//import org.dreambot.api.wrappers.widgets.message.Message;
 
 import java.awt.*;
 import java.net.HttpURLConnection;
@@ -26,10 +29,11 @@ import java.util.List;
         category = Category.UTILITY, name = "Mining Scraper", author = "ChronicCoder", version = 0.1
 )
 
-public class Main extends AbstractScript {
+public class Main extends AbstractScript implements AdvancedMessageListener {
     String hiscores_url = "https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws";
     HashSet<String> checked_players = new HashSet<String>();
     List<World> world_list = new Worlds().all(wo -> wo != null && wo.isNormal() && wo.isF2P() && wo.getWorld() < 400);
+    Hashtable<String, String> message_dict = new Hashtable<String, String>();
 
     //get the localhost IP address, if server is running on some other IP, you need to use that
     InetAddress host;
@@ -52,6 +56,16 @@ public class Main extends AbstractScript {
             checked_players.add(line);
         }
         log("Added " + checked_players.size() + " previous players");
+    }
+
+    @Override
+    public void onPrivateInMessage(Message message) {
+
+    }
+
+    @Override
+    public void onPrivateOutMessage(Message message) {
+
     }
 
     @Override
@@ -181,6 +195,49 @@ public class Main extends AbstractScript {
         }
     }
 
+    public void askPlayers(String prompt){
+        getKeyboard().type(prompt, true);
+        sleep(Calculations.random(3000, 4000));
+    }
+
+    @Override
+    public void onAutoMessage(Message message) {
+
+    }
+
+    @Override
+    public void onPrivateInfoMessage(Message message) {
+
+    }
+
+    @Override
+    public void onClanMessage(Message message) {
+
+    }
+
+    @Override
+    public void onGameMessage(Message message) {
+
+    }
+
+    @Override
+    //Example onPlayerMessage
+    public void onPlayerMessage(Message m) {
+        String name = m.getUsername();
+
+        if(message_dict.containsKey(name)){
+            String initial_msg = message_dict.get(name);
+            message_dict.put(name, initial_msg + ", " + m.getMessage());
+        } else{
+            message_dict.put(name, m.getMessage());
+        }
+    }
+
+    @Override
+    public void onTradeMessage(Message message) {
+
+    }
+
     private int movement_int = 1;
     private int datacount = 0;
     private int maxdatacollected = 5000;
@@ -195,6 +252,8 @@ public class Main extends AbstractScript {
             log("Heading back to area #" + areaID);
             changeArea(areaID);
         }
+
+        askPlayers("Hey everyone! If you're not a bot please say 'potato'");
 
         Players current_players = getPlayers();
         java.util.List<Player> current_list = current_players.all();

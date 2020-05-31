@@ -16,7 +16,7 @@ date_time = now.strftime("%m-%Y")
 
 data_path = 'data/player_data_{}.csv'.format(date_time)
 labels = ['Name', 'helmet', 'cape', 'amulet', 'weapon', 'body', 'sheild', 'Equip7', 'legs', 'Equip9',\
-	'gloves','boots','Equip12', 'Loc_x', 'Loc_y', 'Anim_id', \
+	'gloves','boots','Equip12', 'Loc_x', 'Loc_y', 'Anim_id', 'Chat_response',\
 		'Overall', 'Attack', 'Defence', 'Strength', 'Hitpoints', 'Ranged', 'Prayer', 'Magic', 'Cooking', 'Woodcutting', \
 			'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer', \
 				'Farming', 'Runecrafting', 'Hunter', 'Construction', 'Location']
@@ -46,8 +46,9 @@ def parseRequest(request_string):
 		parsed_array.append(request_arr[2][0]) # add the location tile x value
 		parsed_array.append(request_arr[2][1]) # add the location tile y value
 		parsed_array.append(request_arr[3]) # add the animation id
+		parsed_array.append(request_arr[4]) # add the chat response
 
-		for i in range(4, 28):
+		for i in range(5, 29):
 			parsed_array.append(request_arr[i].split(',')[1]) # get only the level for each skill
 
 		parsed_array.append(location)
