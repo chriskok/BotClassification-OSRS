@@ -81,9 +81,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             String message = (String) in.readLine();
             addCheckedPlayers(message);
 
-            askPlayers("Hey! How are ya'll doing?");
-            sleep(Calculations.random(15000, 23000));
-            askPlayers("How many bots do you think are here?");
+            askPlayers();
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {
@@ -194,9 +192,10 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
         }
     }
 
-    public void askPlayers(String prompt){
-        getKeyboard().type(prompt, true);
-        sleep(Calculations.random(3000, 4000));
+    public void askPlayers(){
+        getKeyboard().type("Hey! How are ya'll doing?", true);
+        sleep(Calculations.random(15000, 23000));
+        getKeyboard().type("How many bots do you think are here?", true);
     }
 
     @Override
@@ -355,14 +354,14 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             if (areaID >= area.length) {
                 areaID = 0;
             }
+            askPlayers();
+
             return 8000;
         }
         log("Hopping to world: " + w.toString());
         getWorldHopper().hopWorld(w);
 
-        askPlayers("Hey! How are ya'll doing?");
-        sleep(Calculations.random(15000, 23000));
-        askPlayers("How many bots do you think are here?");
+        askPlayers();
 
         return 1000;
     }
