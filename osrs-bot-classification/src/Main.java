@@ -330,6 +330,8 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
 
                 datacount++;
             } else{
+                log("Hiscores data found!");
+
                 log("Sending data for: " + current_name);
                 data_string = data_string  + str_resp;
                 String response = sendMessage(data_string);
@@ -405,6 +407,7 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             connection.setUseCaches(false);
             connection.setDoOutput(true);
 
+
             //Send request
             DataOutputStream wr = new DataOutputStream (
                     connection.getOutputStream());
@@ -421,6 +424,10 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
                 response.append("\r\n");
             }
             rd.close();
+            int code = connection.getResponseCode();
+            if (code != 200 || code != 501){
+                return null;
+            }
             return response.toString();
         } catch (Exception e) {
             e.printStackTrace();

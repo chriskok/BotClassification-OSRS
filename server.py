@@ -36,6 +36,7 @@ def parseRequest(request_string):
 	global location 
 
 	try:
+
 		parsed_array = []
 		request_arr = request_string.split('\r\n')
 		request_arr[1] = ast.literal_eval(request_arr[1]) # convert equipment list to array
@@ -48,7 +49,7 @@ def parseRequest(request_string):
 		parsed_array.append(request_arr[3]) # add the animation id
 		parsed_array.append(request_arr[4]) # add the chat response
 
-		if (not request_arr[5].split(',')[0].isnumeric()):
+		if (request_arr[5] == '0'):
 			for i in range(5, 29):
 				parsed_array.append('0') # insert fake hiscore data, just 0 so we know it's wrong
 		else:
@@ -65,10 +66,10 @@ def parseRequest(request_string):
 		
 		return True
 	except Exception as e:
-		# request_arr = request_string.split('\r\n')
-		# print(request_arr)
-		# print(len(request_arr))
-		# print(e)
+		request_arr = request_string.split('\r\n')
+		print(request_arr)
+		print(len(request_arr))
+		print(e)
 		return False
 
 def getCheckedPlayers():
