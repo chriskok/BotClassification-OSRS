@@ -80,6 +80,10 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
 
             String message = (String) in.readLine();
             addCheckedPlayers(message);
+
+            askPlayers("Hey! How are ya'll doing?");
+            sleep(Calculations.random(15000, 23000));
+            askPlayers("How many bots do you think are here?");
         } catch (UnknownHostException e) {
             System.err.println("Unknown Host.");
         } catch (IOException e) {
@@ -87,11 +91,6 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
                     + "the connection.");
         }
 
-//        changeArea(areaID);
-//        areaID += 1;
-//        if (areaID >= area.length) {
-//            areaID = 0;
-//        }
     }
 
     @Override
@@ -225,11 +224,15 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
     public void onPlayerMessage(Message m) {
         String name = m.getUsername();
 
-        if(message_dict.containsKey(name)){
-            String initial_msg = message_dict.get(name);
-            message_dict.put(name, initial_msg + ", " + m.getMessage());
-        } else{
-            message_dict.put(name, m.getMessage());
+        if (!name.equals(getLocalPlayer().getName())){
+            if(message_dict.containsKey(name)){
+                String initial_msg = message_dict.get(name);
+                message_dict.put(name, initial_msg + ", " + m.getMessage());
+            } else{
+                message_dict.put(name, m.getMessage());
+            }
+
+            log(name + ": " + message_dict.get(name));
         }
     }
 
@@ -252,8 +255,6 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             log("Heading back to area #" + areaID);
             changeArea(areaID);
         }
-
-        askPlayers("Hey everyone! If you're not a bot please say 'potato'");
 
         Players current_players = getPlayers();
         java.util.List<Player> current_list = current_players.all();
@@ -295,11 +296,13 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
             checked_players.add(current_name);
             log("Added: " + current_name);
 
-            // put together string of username, level, gear, location and animation
+            // put together string of username, level, gear, location, animation and chat response
+            String chat_response = message_dict.containsKey(current_name) ? message_dict.get(current_name) : "NA";
             String data_string = current_name + "\r\n" +
                     Arrays.toString(getEquipped(current_player)) + "\r\n" +
                     current_player.getTile().toString() + "\r\n" +
-                    String.valueOf(current_player.getAnimation()) + "\r\n";
+                    String.valueOf(current_player.getAnimation()) + "\r\n" +
+                    chat_response + "\r\n";
 
 
             // finally put together hiscore data and send message
@@ -356,6 +359,10 @@ public class Main extends AbstractScript implements AdvancedMessageListener {
         }
         log("Hopping to world: " + w.toString());
         getWorldHopper().hopWorld(w);
+
+        askPlayers("Hey! How are ya'll doing?");
+        sleep(Calculations.random(15000, 23000));
+        askPlayers("How many bots do you think are here?");
 
         return 1000;
     }

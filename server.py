@@ -67,6 +67,10 @@ def parseRequest(request_string):
 def getCheckedPlayers():
 	player_names = ""
 	first_line = True
+
+	# If the file doesn't exist, return empty
+	if not os.path.isfile(data_path): return player_names
+
 	with open(data_path) as f:
 		for row in f:
 			if (first_line):
