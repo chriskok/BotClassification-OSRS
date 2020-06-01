@@ -127,6 +127,7 @@ def main():
 			if (req_count > 500): 
 				print("Request count exceeded, stopping. Current time: {}".format(datetime.now()))
 				response = "OUT"
+				req_count = 0
 			if (int(time.time() - start) > 7200): 
 				print("Two hours passed, stopping. Current time: {}".format(datetime.now()))
 				response = "OUT"
